@@ -5,7 +5,8 @@ import {formatPrice} from '../scripts/utils/moneyHelper.js';
 let cartContainerHTML = ''
 cart.forEach((item)=>{
     var matchingProduct = FetchAndReturnProduct(item.productId, products);
-    cartContainerHTML += `<div class="cart-item-container">
+    cartContainerHTML += `<div class="cart-item-container 
+    js-cart-item-container-${matchingProduct.id}">
             <div class="delivery-date">Delivery date: Tuesday, June 21</div>
 
             <div class="cart-item-details-grid">
@@ -78,8 +79,12 @@ document.querySelector('.js-order-summary')
     .innerHTML = cartContainerHTML;
 
 document.querySelectorAll('.js-delete-quantity-link')
-    .forEach((link)=>
-    link.addEventListener(('click'), ()=>{
+    .forEach((link)=>{
+    link.addEventListener(('click'), () => {
         const productId = link.dataset.productId;
         removeFromCart(productId);
-    }));
+        document.querySelector(
+          `.js-cart-item-container-${productId}`
+        ).remove();
+      });
+    });
