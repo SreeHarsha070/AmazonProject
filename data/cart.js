@@ -1,4 +1,24 @@
-export const cart = [];
+export let cart = JSON.parse(localStorage.getItem('cart'));
+
+if(!cart){
+    cart = [
+        {
+            productId:"e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
+            quantity:1
+        },
+        {
+            productId:"15b6fc6f-327a-4ec4-896f-486349e85a3d",
+            quantity:2
+        },
+        {
+            productId:"54e0eccd-8f36-462b-b68a-8182611d9add",
+            quantity:3
+        }
+    ];
+}
+function saveToLocalStorage(){
+    localStorage.setItem('cart', JSON.stringify(cart));
+}
 
 export function addToCart(button) {
     let matchFound = false;
@@ -17,6 +37,7 @@ export function addToCart(button) {
             quantity: 1
         });
     }
+    saveToLocalStorage();
 }
 
 export function updateCartQuantity(document, cart){
@@ -32,4 +53,45 @@ export function updateCartQuantity(document, cart){
     }
 
     quantityElement.innerHTML = cartQuantity;
+}
+
+export function removeFromCart(productId){
+    const newCart = [];
+    cart.forEach((cartItem)=>{
+        if(cartItem.productId !== productId){
+            newCart.push(cartItem);
+        }
+    })
+    cart = newCart;
+    saveToLocalStorage();
+    return newCart;
+}
+
+export function removeQuantityFromCart(productId, products){
+    let product = FetchFromCartById(productId, products);
+    console.log(product.productId, product.quantity);
+    if(product.quantity === 0){
+        return product.quantity;
+    }
+    product.quantity -= 1;
+    return product.quantity;
+}
+
+export function FetchAndReturnProduct(Id, products){
+    let isFound = false;
+    const product = products.find(product => product.id === Id);
+    if (!product) {
+        console.log('No matching product found with Id - ' + Id);
+        return products[0];
+    }
+    return product;
+}
+
+export function FetchFromCartById(Id){
+    const product = cart.find(item => item.productId === Id);
+    if (!product) {
+        console.log('No matching product found with Id - ' + Id);
+        return cart[0];
+    }
+    return product;
 }
