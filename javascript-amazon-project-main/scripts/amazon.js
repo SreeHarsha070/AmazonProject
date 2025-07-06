@@ -1,3 +1,4 @@
+import {cart} from '../data/cart.js'
 let productHtml = '';
 
 products.forEach((product, index)=>{
@@ -82,7 +83,6 @@ function AddToCart(button) {
             quantity: 1
         });
     }
-    // console.log(cart);
 }
 
 function UpdateCartQuantity(document, cart){
