@@ -1,4 +1,6 @@
-import {cart} from '../data/cart.js'
+import {cart, addToCart, updateCartQuantity} from '../data/cart.js'
+import {products} from '../data/products.js'
+
 let productHtml = '';
 
 products.forEach((product, index)=>{
@@ -61,41 +63,7 @@ document.querySelectorAll('.js-add-to-cart-button')
     .forEach((button)=>{
         button.addEventListener
         ('click', ()=>{
-            AddToCart(button);  
-            UpdateCartQuantity(document, cart);         
+            addToCart(button);  
+            updateCartQuantity(document, cart);         
         })
     });
-
-function AddToCart(button) {
-    let matchFound = false;
-    let productId = button.dataset.productId;
-    cart.forEach((item) => {
-        if (productId === item.productId) {
-            matchFound = true;
-            item.quantity += 1;
-        }
-    });
-
-    if (matchFound === false) {
-        cart.push({
-            productId: productId,
-            productName: button.dataset.productName,
-            quantity: 1
-        });
-    }
-}
-
-function UpdateCartQuantity(document, cart){
-    let cartQuantity = 0;
-    cart.forEach((item)=>{
-        cartQuantity += item.quantity
-    })
-
-    const quantityElement = document.querySelector('.js-cart-quantity');
-    if (!quantityElement) {
-        console.error(".js-cart-quantity not found in DOM");
-        return;
-    }
-
-    quantityElement.innerHTML = cartQuantity;
-}
